@@ -7,10 +7,10 @@ name = "netbench"
 version = "0.1.0"
 description = "Mobile network performance benchmarking pipeline (Ookla open data)"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = ["boto3>=1.34"]
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "ruff>=0.6", "pre-commit>=4"]
+dev = ["pytest>=8", "ruff>=0.6", "pre-commit>=4", "moto[s3]>=5"]
 [tool.setuptools.packages.find]
 where = ["src"]
 
