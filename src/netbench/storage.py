@@ -50,6 +50,17 @@ def ensure_buckets(client: BaseClient, settings: Settings) -> None:
         ensure_bucket(client, name)
 
 
+def object_exists(client: BaseClient, bucket: str, key: str) -> bool:
+    """Return True if the object exists in the bucket."""
+    try:
+        client.head_object(Bucket=bucket, Key=key)
+    except ClientError as error:
+        if error.response["Error"]["Code"] in ("404", "NoSuchKey"):
+            return False
+        raise
+    return True
+
+
 def main() -> None:
     setup_logging()
     settings = load_settings()
