@@ -1,11 +1,13 @@
 """Helpers for S3-compatible object storage (MinIO locally, AWS S3 in the cloud)."""
 
 import logging
+from urllib.parse import urlparse
 
 import boto3
 from botocore.client import BaseClient
 from botocore.config import Config
 from botocore.exceptions import ClientError
+from pyarrow import fs
 
 from netbench.config import Settings, load_settings
 from netbench.logging_setup import setup_logging
@@ -22,6 +24,18 @@ def make_s3_client(settings: Settings) -> BaseClient:
         aws_secret_access_key=settings.s3_secret_key,
         region_name="us-east-1",
         config=Config(s3={"addressing_style": "path"}),
+    )
+
+
+def make_arrow_filesystem(settings: Settings) -> fs.S3FileSystem:
+    """pyarrow filesystem for the same endpoint, to read Parquet with pandas/pyarrow."""
+    endpoint = urlparse(settings.s3_endpoint_url)
+    return fs.S3FileSystem(
+        access_key=settings.s3_access_key,
+        secret_key=settings.s3_secret_key,
+        endpoint_override=endpoint.netloc,
+        scheme=endpoint.scheme,
+        region="us-east-1",
     )
 
 
