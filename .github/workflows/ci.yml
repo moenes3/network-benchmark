@@ -9,14 +9,14 @@ jobs:
   lint-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           cache: pip
 
-      - uses: actions/setup-java@v4  # Spark needs a JVM for the Spark unit tests
+      - uses: actions/setup-java@v5  # Spark needs a JVM for the Spark unit tests
         with:
           distribution: temurin
           java-version: "17"
